@@ -20,9 +20,10 @@ This project implements a simplified MIPS processor called IITK-Mini-MIPS, desig
 ├── src/
 │ ├── alu.v 
 │ ├── data_memory.v 
-│ ├── fpalu.v # Floating-point ALU 
+│ ├── fpalu.v
 │ ├── instruction_decode.v 
 │ ├── instruction_fetch.v 
+│ ├── instruction_formats.v 
 │ ├── instruction_memory.v 
 │ ├── iitk_mini_mips.v 
 │ └── registers.v 
@@ -73,58 +74,93 @@ This project implements a simplified MIPS processor called IITK-Mini-MIPS, desig
 - Handles normalized values, overflow, and underflow
 - Partial handling of NaN and infinity cases
 
-## Testing
 
-The testbench (`iitk_mini_mips_tb.v`) includes test cases for:
+## Getting Started
 
-1. Integer arithmetic (e.g., `add`)
-2. Memory operations (e.g., `lw`, `sw`)
-3. Branch instructions (e.g., `beq`)
-4. Floating-point operations (e.g., `add.s`)
-5. Jump instructions (e.g., `j`)
-6. Halting using `FINISH` instruction
+### Step 1: Write your Program
 
-### Run with ModelSim:
+Write your assembly code in the file: [`testbench/assembly.txt`](testbench/assembly.txt)
 
-1. command to compile the code:
+You can refer to the sample: [`example_assembly.txt`](example_assembly.txt)
 
-```bash
-vsim -do testbench/run_simulations.do
-```
-or 
+Each instruction must be written on a separate line, using only the supported instruction set (see below).
+
+### Step 2: Assemble
+
+Run the Python-based assembler:
 
 ```bash
-vsim -do testbench/run_test.do
+python3 assembler.py
 ```
-2. coomand to view the waveform output:
 
-```bash
-view wave
-```
-### Run with Icarus Verilog:
+This will convert `assembly.txt` to binary and save it in `testbench/instructions.mem`.
 
-1. command to compile the code:
+### Step 3: Simulate
 
-```bash
-cd testbench
-./run_test
-```
-2. coomand to view the waveform output:
+   1. Using ModelSim:
 
-```bash
-gtkwave dump.vcd
-```
+      ```bash
+      vsim -do testbench/run_simulations.do
+      ```
+      or 
+
+      ```bash
+      vsim -do testbench/run_test.do
+      ```
+      - To view the waveform output:
+
+      ```bash
+      view wave
+      ```
+   2. Using Icarus Verilog + GTKWave:
+
+      ```bash
+      cd testbench
+      ./run_test
+      ```
+      - To view the waveform output:
+
+      ```bash
+      gtkwave dump.vcd
+      ```
+
+### Supported Instruction Set
+1. Integer R-type:
+   - `ADD`, `SUB`, `AND`, `OR`, `XOR`, `NOT`
+   - `SLT`, `MADD`, `MUL`
+2. Shifts: 
+   - `SLL`, `SRL`, `SRA`, `SLA`
+3. Integer I-type:
+   - `ADDI`, `ANDI`, `ORI`, `XORI`
+4. Load word:
+   - `LW`
+5. Store word:
+   - `SW`
+6. Branch type:
+   - `BEQ`
+6. J-type:
+   - `JUMP`, `JAL`
+7. Floating-Point Operations:
+   - `FP_ADD`, `FP_SUB`, `FP_MUL`
+   - Comparisons: `FP_EQ`, `FP_LT`, `FP_LE`, `FP_GT`, `FP_GE`, `FP_CMP`
+8. Special:
+   - `FINISH` — Halts the processor
+
+### Example Program
+- See [`example_assembly.txt`](example_assembly.txt) for a complete working sample.
 
 ### Requirements
+- Python 3
 - ModelSim
 - Or Icarus Verilog and GTKWave
 
 ## Usage
 
 1. Clone the repository
-2. Compile the Verilog files using your preferred simulator
-3. Run the testbench to verify functionality
-4. Modify the test program in the testbench to test different instructions
+2. Write your program in `testbench/assembly.txt`
+3. Run `python3 assembler.py` to generate `instructions.mem`
+4. Simulate using `ModelSim` or `Icarus Verilog`
+5. Modify test programs to explore various instructions
 
 ## Contributing
 
