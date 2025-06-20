@@ -17,18 +17,28 @@ This project implements a simplified MIPS processor called IITK-Mini-MIPS, desig
 ## Project Structure
 
 ```
-src/
-├── registers.v         # Register file implementation
-├── memory.v           # Instruction and data memory
-├── instruction_formats.v  # Instruction format definitions
-├── instruction_fetch.v    # Instruction fetch stage
-├── instruction_decode.v   # Instruction decode stage
-├── alu.v              # Integer ALU implementation
-├── fpalu.v            # Floating-point ALU implementation
-├── iitk_mini_mips.v   # Main processor module
-└── testbench/
-    └── iitk_mini_mips_tb.v  # Testbench for verification
+├── src/
+│ ├── alu.v 
+│ ├── data_memory.v 
+│ ├── fpalu.v # Floating-point ALU 
+│ ├── instruction_decode.v 
+│ ├── instruction_fetch.v 
+│ ├── instruction_memory.v 
+│ ├── iitk_mini_mips.v 
+│ └── registers.v 
+│
+├── testbench/
+│ ├── iitk_mini_mips_tb.v 
+│ ├── instructions.mem 
+│ ├── run_test.do 
+│ ├── run_simulations.do 
+│ └── run_test 
+│
+├── README.md
+├── .gitignore
+
 ```
+
 
 ## Implementation Details
 
@@ -39,52 +49,75 @@ src/
 - Byte-addressable memory interface
 
 ### Register File
-- 32 general-purpose registers (R0-R31)
-- 32 floating-point registers (F0-F31)
-- Special registers (PC, HI, LO)
-- Register 0 hardwired to 0
-- Synchronous write with enable
+- 32 general-purpose registers (R0–R31)
+- 32 floating-point registers (F0–F31)
+- Special-purpose registers: `PC`, `HI`, `LO`
+- Register R0 is hardwired to zero
+- Synchronous write with write-enable
 
 ### Instruction Formats
-- R-type: opcode (6 bits), rs (5 bits), rt (5 bits), rd (5 bits), shamt (5 bits), funct (6 bits)
-- I-type: opcode (6 bits), rs (5 bits), rt (5 bits), immediate (16 bits)
-- J-type: opcode (6 bits), address (26 bits)
+- **R-type**: `opcode (6) | rs (5) | rt (5) | rd (5) | shamt (5) | funct (6)`
+- **I-type**: `opcode (6) | rs (5) | rt (5) | immediate (16)`
+- **J-type**: `opcode (6) | address (26)`
 
 ### ALU Operations
-- Integer arithmetic: add, subtract, multiply
-- Logical operations: AND, OR, XOR, NOT
-- Shift operations: SLL, SRL, SLA, SRA
-- Comparison operations: SLT
+- Integer: `add`, `sub`, `mul`
+- Logical: `and`, `or`, `xor`, `not`
+- Shifts: `sll`, `srl`, `sla`, `sra`
+- Comparison: `slt`
 - Overflow and carry detection
 
 ### Floating-Point ALU
 - IEEE 754 single-precision format
-- Operations: add, subtract, multiply, compare
-- Special cases handling (NaN, infinity)
-- Overflow and underflow detection
+- Operations: `add.s`, `sub.s`, `mul.s`, `cmp.s`, `eq.s`, `lt.s`, `le.s`, `gt.s`, `ge.s`
+- Handles normalized values, overflow, and underflow
+- Partial handling of NaN and infinity cases
 
 ## Testing
 
 The testbench (`iitk_mini_mips_tb.v`) includes test cases for:
-1. Basic arithmetic operations (add)
-2. Memory operations (load/store)
-3. Branch instructions (beq)
-4. Floating-point operations (add.s)
-5. Jump instructions (j)
 
-To run the testbench:
-1. Compile all Verilog files:
-   ```bash
-   vlog *.v
-   ```
-2. Run the simulation:
-   ```bash
-   vsim -c iitk_mini_mips_tb -do "run -all"
-   ```
-3. View the waveform output:
-   ```bash
-   view wave
-   ```
+1. Integer arithmetic (e.g., `add`)
+2. Memory operations (e.g., `lw`, `sw`)
+3. Branch instructions (e.g., `beq`)
+4. Floating-point operations (e.g., `add.s`)
+5. Jump instructions (e.g., `j`)
+6. Halting using `FINISH` instruction
+
+### Run with ModelSim:
+
+1. command to compile the code:
+
+```bash
+vsim -do testbench/run_simulations.do
+```
+or 
+
+```bash
+vsim -do testbench/run_test.do
+```
+2. coomand to view the waveform output:
+
+```bash
+view wave
+```
+### Run with Icarus Verilog:
+
+1. command to compile the code:
+
+```bash
+cd testbench
+./run_test
+```
+2. coomand to view the waveform output:
+
+```bash
+gtkwave dump.vcd
+```
+
+### Requirements
+- ModelSim
+- Or Icarus Verilog and GTKWave
 
 ## Usage
 
@@ -99,4 +132,4 @@ This is an educational project. Feel free to use and modify the code for learnin
 
 ## License
 
-This project is part of CS220 coursework and should be used in accordance with academic integrity policies. 
+This project is part of the CS220: Computer Architecture coursework at IIT Kanpur and should be used in accordance with academic integrity policies. 
