@@ -30,11 +30,14 @@ This project implements a simplified MIPS processor called IITK-Mini-MIPS, desig
 │
 ├── testbench/
 │ ├── iitk_mini_mips_tb.v 
+│ ├── assembly.txt
 │ ├── instructions.mem 
 │ ├── run_test.do 
+│ ├── mips_to_machinecode.py 
 │ ├── run_simulations.do 
-│ └── run_test 
+│ └── run_test.sh 
 │
+├── example_assembly.txt
 ├── README.md
 ├── .gitignore
 
