@@ -107,8 +107,7 @@ This will convert `assembly.txt` to binary and save it in `testbench/instruction
       ```bash
       vsim -do testbench/run_test.do
       ```
-      - To view the waveform output:
-
+      To view the waveform output:
       ```bash
       view wave
       ```
@@ -118,8 +117,7 @@ This will convert `assembly.txt` to binary and save it in `testbench/instruction
       cd testbench
       ./run_test
       ```
-      - To view the waveform output:
-
+      To view the waveform output:
       ```bash
       gtkwave dump.vcd
       ```
